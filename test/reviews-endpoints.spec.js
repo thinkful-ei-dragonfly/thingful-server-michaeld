@@ -29,11 +29,11 @@ describe('Reviews Endpoints', function() {
       helpers.seedThingsTables(
         db,
         testUsers,
-        testThings
+        testThings,
       )
     )
 
-    it(`creates an review, responding with 201 and the new review`, function() {
+    it(`creates a review, responding with 201 and the new review`, function() {
       this.retries(3)
       const testThing = testThings[0]
       const testUser = testUsers[0]
@@ -44,7 +44,7 @@ describe('Reviews Endpoints', function() {
       }
       return supertest(app)
         .post('/api/reviews')
-        .set('Authorization', helpers.makeAuthHeader(testUser))
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .send(newReview)
         .expect(201)
         .expect(res => {
@@ -68,7 +68,7 @@ describe('Reviews Endpoints', function() {
               expect(row.text).to.eql(newReview.text)
               expect(row.rating).to.eql(newReview.rating)
               expect(row.thing_id).to.eql(newReview.thing_id)
-              //expect(row.user_id).to.eql(testUser.id)
+              // expect(row.user_id).to.eql(newReview.user_id)
               const expectedDate = new Date().toLocaleString()
               const actualDate = new Date(row.date_created).toLocaleString()
               expect(actualDate).to.eql(expectedDate)
@@ -84,6 +84,7 @@ describe('Reviews Endpoints', function() {
       const newReview = {
         text: 'Test new review',
         rating: 3,
+        user_id: testUser.id,
         thing_id: testThing.id,
       }
 
@@ -92,7 +93,7 @@ describe('Reviews Endpoints', function() {
 
         return supertest(app)
           .post('/api/reviews')
-          .set('Authorization', helpers.makeAuthHeader(testUser))
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
           .send(newReview)
           .expect(400, {
             error: `Missing '${field}' in request body`,

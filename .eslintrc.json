@@ -26,6 +26,6 @@
         "no-eval": "error",            //disallows `eval()` usage
         "indent": ["error", 2],        //enforce 2 space indents (not tabs)        
         "quotes": ["error", "single"], //prefer single quotes over double quotes
-        "semi": ["error", 0]    //enforce semi-colon usage
+        "semi": ["error", 1]    //enforce semi-colon usage
     }
 }
